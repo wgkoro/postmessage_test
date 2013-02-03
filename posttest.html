@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja">
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Language" content="ja">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+
+<title>クロスドメイン環境でのメッセージ送受信テスト</title>
+
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+
+<script type='text/javascript'>
+	function post_message(){
+		var val = document.getElementById('message').value;
+		var win = document.getElementById('iframe').contentWindow;
+		win.postMessage(val, 'http://www.wingall.com');
+	}
+
+	function changeIframeSize(event){
+		if (event.origin != 'http://www.wingall.com') return;
+
+		var control	= event.data;
+		var target	= document.getElementById('iframe');
+		var width	= parseInt(target.width);
+		var height	= parseInt(target.height);
+		var change_val = 50;
+
+		if(control == '+'){
+			target.width	= width + change_val;
+			target.height	= height + change_val;
+		}
+		else if(control == '-'){
+			target.width	= width - change_val;
+			target.height	= height - change_val;
+		}
+	}
+
+
+	if(window.addEventListener){
+		addEventListener('message', changeIframeSize, false);
+	}
+	else{
+		attachEvent('onmessage', changeIframeSize);
+	}
+</script>
+
+<style type='text/css'>
+	*{
+		color : #4C4C4C;
+	}
+</style>
+
+</head>
+<body>
+    
+	<h3>クロスドメイン環境でのメッセージ送受信テスト</h3>
+
+	<div>
+		POSTしてみる<br>
+		<form>
+			<input type='text' width='50' name='post' id='message'><br>
+			<input type='button' value='送信してみる' onclick='post_message();'>
+		</form>
+	</div>
+
+	<iframe src='http://www.wingall.com/dev/postmessage/message.html' width='300' height='300' name='iframe' id='iframe'></iframe>
+
+	<p>このページについて：<a href='http://zafiel.wingall.com/archives/6631'>postMessageとiframeでクロスドメインメッセージを送受信してみる | Azrael</a></p>
+
+</body>
+</html>

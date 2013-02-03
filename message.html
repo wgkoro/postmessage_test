@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="ja">
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Language" content="ja">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+
+<title></title>
+
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/css/style.css">
+
+<script type='text/javascript'>
+	function listener(event){
+		if (event.origin !== 'http://zafiel.wingall.com') return
+		document.getElementById('message').value = event.data;
+	}
+
+	function changeIframeSize(val){
+		window.parent.postMessage(val, 'http://zafiel.wingall.com');
+	}
+
+
+
+if(window.addEventListener){
+	addEventListener('message', listener, false);
+}
+else{
+	attachEvent('onmessage', listener);
+}
+
+</script>
+
+<style type='text/css'>
+	#message {
+		border : none;
+		font-size : 13px;
+	}
+</style>
+
+</head>
+<body>
+    
+	<h5>このページのドメイン :<br>
+		www.wingall.com</h5>
+
+	<div>
+		<form>
+			POSTされた値：<input type='text' width='50' name='post' id='message' readonly='readonly'>
+			<br>
+			親のiframeを操作してみる ---<br>
+			<input type='button' value='iframeを大きく' value='+' onclick='changeIframeSize("+")'>　
+			<input type='button' value='iframeを小さく' value='-' onclick='changeIframeSize("-")'>
+		</form>
+	</div>
+</body>
+</html>
